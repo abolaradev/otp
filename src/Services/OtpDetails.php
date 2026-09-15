@@ -1,12 +1,12 @@
 <?php
 
-namespace Abolaradev\Otp\DTO;
+namespace Abolaradev\Otp\Services;
 
 
 /**
  * Data Transfer Object containing the details of a generated OTP token.
  */
-class TokenDetails
+readonly class OtpDetails
 {
     /**
      * Create a new TokenDetails instance.

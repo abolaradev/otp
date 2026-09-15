@@ -2,7 +2,7 @@
 
 namespace Abolaradev\Otp\Traits;
 
-use Abolaradev\Otp\DTO\TokenDetails;
+use Abolaradev\Otp\Services\OtpDetails;
 use Illuminate\Support\Str;
 
 trait HasTokenGenerator
@@ -95,7 +95,7 @@ trait HasTokenGenerator
      *
      * @throws \Random\RandomException
      */
-    protected function buildTokenDetailsFor(string $recipient): TokenDetails
+    protected function buildTokenDetailsFor(string $recipient): OtpDetails
     {
         $token = $this->generate();
 
@@ -103,7 +103,7 @@ trait HasTokenGenerator
 
         $purpose = $this->purpose ?? config('otp.token_purpose');
 
-        return new TokenDetails(
+        return new OtpDetails(
             token: $token,
             expiration: $expiration,
             purpose: $purpose,

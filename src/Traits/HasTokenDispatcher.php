@@ -34,7 +34,7 @@ trait HasTokenDispatcher
      */
     public function dispatch() :void
     {
-        $tokenDetails = $this->buildTokenDetailsFor($this->recipient);
-        event( new TokenGenerated($tokenDetails));
+        $otpDetails = $this->buildTokenDetailsFor($this->recipient);
+        event(new TokenGenerated($otpDetails));
     }
 }

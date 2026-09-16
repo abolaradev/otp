@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class OtpStorage
 {
-    use HasTokenCacher , HasTokenHasher{
-        hash as hashToken;
-    }
+    use HasTokenHasher, HasTokenCacher;
     
     /**
      * Create a new OTP storage instance.
@@ -30,7 +28,7 @@ class OtpStorage
      */
     public function hash() :self
     {
-        $this->hashToken($this->otpDetails->getToken());
+        $this->hashToken();
 
         return $this;
     }
@@ -42,7 +40,7 @@ class OtpStorage
      */
     public function cache() :void
     {
-        $this->add($this->otpDetails,$this->getHashedToken());
+        $this->addTokenToCache();
     }
 
 } 

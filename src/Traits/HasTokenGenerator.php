@@ -24,6 +24,17 @@ trait HasTokenGenerator
 
 
     /**
+     * Create a new OTP issuance instance using the configured token settings.
+     */
+    public function __construct()
+    {
+        $this->length =  config('otp.token_length');
+        $this->expiration = config('otp.token_expiration');
+        $this->purpose = config('otp.token_purpose');
+    }
+
+
+    /**
      * Set the length of the OTP token.
      *
      * @param int $length
@@ -64,7 +75,7 @@ trait HasTokenGenerator
         return $this;
     }
 
-
+    
     /**
      * Generate a cryptographically secure numeric OTP token.
      *
@@ -77,37 +88,30 @@ trait HasTokenGenerator
      */
     private function generate(): string
     {
-        $length = $this->length ?? config('otp.token_length');
-
-        $max = pow(10, $length) - 1;
+        $max = pow(10, $this->length) - 1;
 
         $value = (string) random_int(0, $max);
 
-        return Str::padLeft($value, $length, '0');
+        return Str::padLeft($value, $this->length, '0');
     }
 
 
     /**
      * Build the details of a new OTP token for the given recipient.
      *
-     * @param string $recipient
      * @return TokenDetails
      *
      * @throws \Random\RandomException
      */
-    protected function buildTokenDetailsFor(string $recipient): OtpDetails
+    protected function buildTokenDetails(): OtpDetails
     {
-        $token = $this->generate();
-
-        $expiration = $this->expiration ?? config('otp.token_expiration');
-
-        $purpose = $this->purpose ?? config('otp.token_purpose');
-
-        return new OtpDetails(
-            token: $token,
-            expiration: $expiration,
-            purpose: $purpose,
-            recipient: $recipient,
-        );
+        return $this->ensureNoActiveToken(function(){
+            return new OtpDetails(
+                token: $this->generate(),
+                expiration: $this->expiration,
+                purpose: $this->purpose,
+                recipient: $this->recipient,
+            );
+        });
     }
 }

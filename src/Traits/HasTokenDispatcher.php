@@ -6,9 +6,9 @@ use Abolaradev\Otp\Events\TokenGenerated;
 
 trait HasTokenDispatcher
 {
-     /**
-     * The recipient of the OTP token.
-     */
+    /**
+    * The recipient of the OTP token.
+    */
     private string $recipient; 
 
     /**
@@ -24,7 +24,7 @@ trait HasTokenDispatcher
         return $this;
     }
 
-     /**
+    /**
      * Dispatch the generated OTP token.
      *
      * Builds the token details for the configured recipient
@@ -34,7 +34,7 @@ trait HasTokenDispatcher
      */
     public function dispatch() :void
     {
-        $otpDetails = $this->buildTokenDetailsFor($this->recipient);
+        $otpDetails = $this->buildTokenDetails();
         event(new TokenGenerated($otpDetails));
     }
 }

@@ -2,25 +2,40 @@
 
 namespace Abolaradev\Otp\Traits;
 
-use Abolaradev\Otp\Services\OtpDetails;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Hash;
 
 trait HasTokenCacher 
 {
-    protected function add(OtpDetails $otpDetails , string $hashedToken) 
+    /**
+     * Add the hashed OTP token to the cache.
+    */
+    protected function addTokenToCache(): void
     {
-        $c=Cache::add(
-            key: "otp:".$otpDetails->getPurpose().":".$otpDetails->getRecipient(),
-            value: $hashedToken,
-            ttl: $otpDetails->getExpiration()
+        Cache::add(
+            key: $this->getCachedTokenKey(),
+            value: $this->getHashedToken(),
+            ttl: $this->otpDetails->getExpiration()
         );
-
-        dump($c);
     }
 
-    protected function has()
-    {
 
+    /**
+     * Retrieve the cached hashed OTP token.
+     */
+    protected function getCachedToken(): string
+    {
+        return Cache::get($this->getCacheKey());
+    }
+
+    /**
+     * Generate the cache key for the OTP token.
+     */
+    private function getCachedTokenKey(): string
+    {
+        return sprintf(
+            'otp:%s:%s',
+            $this->otpDetails->getPurpose(),
+            $this->otpDetails->getRecipient()
+        );
     }
 }

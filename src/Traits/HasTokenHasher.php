@@ -14,9 +14,11 @@ trait HasTokenHasher
     /**
      * Hash the given token.
      */
-    protected function hash(string $token): self
+    protected function hashToken(): self
     {
-        $this->hashedToken = Hash::make($token);
+        $this->hashedToken = Hash::make(
+            $this->otpDetails->getToken()
+        );
 
         return $this;
     }
@@ -32,7 +34,7 @@ trait HasTokenHasher
     /**
      * Determine whether the given token matches the hashed token.
      */
-    protected function check(string $token): bool
+    protected function checkHashedToken(string $token): bool
     {
         return Hash::check($token, $this->getHashedToken());
     }

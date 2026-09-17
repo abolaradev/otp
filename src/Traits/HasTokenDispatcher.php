@@ -34,7 +34,9 @@ trait HasTokenDispatcher
      */
     public function dispatch() :void
     {
-        $otpDetails = $this->buildTokenDetails();
-        event(new TokenGenerated($otpDetails));
+        $this->rateLimit('issuance', function(){
+            $otpDetails = $this->buildTokenDetails();
+            event(new TokenGenerated($otpDetails));
+        });
     }
 }

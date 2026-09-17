@@ -3,6 +3,7 @@
 namespace Abolaradev\Otp\Traits;
 
 use Abolaradev\Otp\Events\TokenGenerated;
+use Abolaradev\Otp\Services\OtpDetails;
 
 trait HasTokenDispatcher
 {
@@ -25,18 +26,30 @@ trait HasTokenDispatcher
     }
 
     /**
-     * Dispatch the generated OTP token.
+     * Dispatch the OTP issuance process.
      *
-     * Builds the token details for the configured recipient
-     * and dispatches the TokenGenerated event.
+     * Applies the issuance rate limit, ensures that no active OTP exists
+     * for the recipient, generates the OTP details, and dispatches the
+     * token generated event.
      *
      * @return void
+     *
+     * @throws OtpRateLimitExceededException If the issuance rate limit has been exceeded.
+     * @throws OtpActiveTokenExistsException If an active OTP already exists for the recipient.
      */
     public function dispatch() :void
     {
         $this->rateLimit('issuance', function(){
-            $otpDetails = $this->buildTokenDetails();
-            event(new TokenGenerated($otpDetails));
+            $this->ensureNoActiveToken(function(){
+                $otpDetails = new OtpDetails(
+                    token: $this->generateToken(),
+                    expiration: $this->expiration,
+                    purpose: $this->purpose,
+                    recipient: $this->recipient
+                );
+
+                event(new TokenGenerated($otpDetails));
+            });
         });
     }
 }

@@ -86,32 +86,12 @@ trait HasTokenGenerator
      *
      * @throws \Random\RandomException
      */
-    private function generate(): string
+    protected function generateToken(): string
     {
         $max = pow(10, $this->length) - 1;
 
         $value = (string) random_int(0, $max);
 
         return Str::padLeft($value, $this->length, '0');
-    }
-
-
-    /**
-     * Build the details of a new OTP token for the given recipient.
-     *
-     * @return TokenDetails
-     *
-     * @throws \Random\RandomException
-     */
-    protected function buildTokenDetails(): OtpDetails
-    {
-        return $this->ensureNoActiveToken(function(){
-            return new OtpDetails(
-                token: $this->generate(),
-                expiration: $this->expiration,
-                purpose: $this->purpose,
-                recipient: $this->recipient,
-            );
-        });
     }
 }

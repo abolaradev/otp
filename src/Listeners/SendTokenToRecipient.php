@@ -25,7 +25,7 @@ class SendTokenToRecipient
     {
         $otpDetails = $event->otpDetails;
     
-        Notification::route('sms',$otpDetails)
-                    ->notify(new OtpNotification);
+        Notification::route('recipient',$otpDetails->getRecipient())
+                    ->notify(new OtpNotification($otpDetails));
     }
 }

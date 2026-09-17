@@ -3,17 +3,20 @@
 namespace Abolaradev\Otp\Notifications;
 
 use Abolaradev\Otp\Channels\SmsChannel;
-use Abolaradev\Otp\DTO\TokenDetails;
+use Abolaradev\Otp\Services\OtpDetails;
 use Abolaradev\Otp\Services\OtpStorage;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
 class OtpNotification extends Notification
 {
     use Queueable;
+
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct(protected OtpDetails $otpDetails)
+    {}
 
     /**
      * Get the notification's delivery channels.
@@ -27,16 +30,22 @@ class OtpNotification extends Notification
         ];
     }
 
+    /**
+     * Provides the OTP details required by the SMS notification channel.
+     *
+     * @param  mixed $notifiable
+     * @return OtpDetails
+     */
+    public function toSMS(object $notifiable) :OtpDetails
+    {
+        return $this->otpDetails;
+    }
 
     /**
      * Handle the notification after it has been sent.
      */
     public function afterSending(object $notifiable, string $channel, mixed $response): void
     {
-         $route = $notifiable->routeNotificationFor('sms');
-
-         (new OtpStorage($route))->hash()
-                                 ->cache();
-
+         (new OtpStorage($this->otpDetails))->hash()->cache();
     }
 }

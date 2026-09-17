@@ -13,6 +13,11 @@ trait HasTokenDispatcher
     private string $recipient; 
 
     /**
+    * The OTP Delivery Channel.
+    */
+    private string $channel;
+
+    /**
      * Set the recipient of the OTP token.
      *
      * @param string $recipient
@@ -21,6 +26,19 @@ trait HasTokenDispatcher
     public function to(string $recipient) :self
     {
         $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    /**
+     * Set the channel of the OTP Delivery
+     *
+     * @param  string $channel
+     * @return $this
+     */
+    public function channel(string $channel) :self
+    {
+        $this->channel = $channel;
 
         return $this;
     }
@@ -45,6 +63,7 @@ trait HasTokenDispatcher
                     token: $this->generateToken(),
                     expiration: $this->expiration,
                     purpose: $this->purpose,
+                    channel: $this->channel,
                     recipient: $this->recipient
                 );
 

@@ -14,12 +14,14 @@ readonly class OtpDetails
      * @param string $token The generated OTP token.
      * @param int $expiration The token expiration time.
      * @param string $purpose The purpose of the OTP token.
+     * @param string $channel The OTP Delivery Channel.
      * @param string $recipient The recipient of the OTP token.
      */
     public function __construct(
         private string $token,
         private int $expiration,
         private string $purpose,
+        private string $channel,
         private string $recipient
     ) {}
 
@@ -51,6 +53,16 @@ readonly class OtpDetails
     public function getPurpose(): string
     {
         return $this->purpose;
+    }
+    
+    /**
+     * Get the OTP Delivery Channel
+     *
+     * @return string
+     */
+    public function getChannel(): string
+    {
+        return $this->channel;
     }
 
     /**

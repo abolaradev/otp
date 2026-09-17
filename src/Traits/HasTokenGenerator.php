@@ -24,17 +24,6 @@ trait HasTokenGenerator
 
 
     /**
-     * Create a new OTP issuance instance using the configured token settings.
-     */
-    public function __construct()
-    {
-        $this->length =  config('otp.token_length');
-        $this->expiration = config('otp.token_expiration');
-        $this->purpose = config('otp.token_purpose');
-    }
-
-
-    /**
      * Set the length of the OTP token.
      *
      * @param int $length

@@ -1,32 +1,49 @@
 <?php
 
-namespace Abolaradev\Otp\Services;
-
+namespace Abolaradev\Otp\DTOs;
 
 /**
- * Data Transfer Object containing the details of a generated OTP token.
+ * Data Transfer Object containing OTP token details.
  */
 readonly class OtpDetails
 {
     /**
-     * Create a new TokenDetails instance.
+     * Create a new OtpDetails instance.
      *
-     * @param string $token The generated OTP token.
-     * @param int $expiration The token expiration time.
-     * @param string $purpose The purpose of the OTP token.
-     * @param string $channel The OTP Delivery Channel.
+     * @param string $token The OTP token.
      * @param string $recipient The recipient of the OTP token.
+     * @param string $purpose The purpose of the OTP token.
+     * @param int|null $expiration The token expiration time, if applicable.
+     * @param string|null $channel The OTP delivery channel, if applicable.
      */
     public function __construct(
         private string $token,
-        private int $expiration,
+        private string $recipient,
         private string $purpose,
-        private string $channel,
-        private string $recipient
+        private ?int $expiration =null,
+        private ?string $channel = null,
     ) {}
-
+    
+   /**
+     * Create an OTP details instance from an array.
+     *
+     * @param array $data The OTP details attributes.
+     *
+     * @return self A new OTP details instance.
+     */
+    public static function fromArray(array $data) :self
+    {
+        return new self(
+            token: $data['token'],
+            recipient: $data['recipient'],
+            purpose: $data['purpose'],
+            expiration: $data['expiration'] ?? null ,
+            channel: $data['channel'] ?? null 
+        );
+    }
+    
     /**
-     * Get the generated OTP token.
+     * Get the OTP token.
      *
      * @return string
      */

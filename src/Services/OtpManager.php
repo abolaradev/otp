@@ -15,7 +15,7 @@ abstract class OtpManager
     /**
      * Create the OTP verification context.
      *
-     * @return OtpVerfication
+     * @return OtpVerification
      */
-    abstract protected function verification(): OtpVerfication;
+    abstract protected function verification(): OtpVerification;
 }

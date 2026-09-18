@@ -34,8 +34,8 @@ trait HasTokenHasher
     /**
      * Determine whether the given token matches the hashed token.
      */
-    protected function checkHashedToken(string $token): bool
+    protected function checkHashedToken(string $token , string $hashedToken): bool
     {
-        return Hash::check($token, $this->getHashedToken());
+        return Hash::check($token, $hashedToken);
     }
 }

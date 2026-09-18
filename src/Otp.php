@@ -7,6 +7,7 @@ use Abolaradev\Otp\Exceptions\OtpInvalidRecipientException;
 use Abolaradev\Otp\Services\OtpIssuance;
 use Abolaradev\Otp\Services\OtpManager;
 use Abolaradev\Otp\Services\OtpVerfication;
+use Abolaradev\Otp\Services\OtpVerification;
 use Illuminate\Support\Str;
 
 /**
@@ -40,9 +41,9 @@ class Otp extends OtpManager
      *
      * @return OtpVerfication
      */
-    protected function verification(): OtpVerfication
+    protected function verification(): OtpVerification
     {
-        return (new OtpVerfication)->from($this->recipient);
+        return (new OtpVerification)->from($this->recipient);
     }
 
    /**

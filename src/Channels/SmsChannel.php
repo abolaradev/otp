@@ -27,7 +27,7 @@ class SmsChannel implements ShouldSmsChannel
         $channelName = $notification->toSMS($notifiable)
                                     ->getChannel();
                                     
-        $channelClass = config("otp.channels.$channelName");
+        $channelClass = config("otp.channels.$channelName.driver");
 
         if (! class_exists($channelClass) ||! is_subclass_of($channelClass, ShouldSmsChannel::class) ) {
             throw new OtpInvalidChannelException($channelClass);

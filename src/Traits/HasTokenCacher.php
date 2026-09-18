@@ -24,7 +24,7 @@ trait HasTokenCacher
      */
     protected function getCachedToken(): string
     {
-        return Cache::get($this->getCacheKey());
+        return Cache::get($this->getCachedTokenKey());
     }
 
     /**

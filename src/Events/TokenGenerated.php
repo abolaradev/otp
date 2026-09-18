@@ -2,7 +2,7 @@
 
 namespace Abolaradev\Otp\Events;
 
-use Abolaradev\Otp\Services\OtpDetails;
+use Abolaradev\Otp\DTOs\OtpDetails;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;

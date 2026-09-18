@@ -2,8 +2,8 @@
 
 namespace Abolaradev\Otp\Notifications;
 
+use Abolaradev\Otp\DTOs\OtpDetails;
 use Abolaradev\Otp\Channels\SmsChannel;
-use Abolaradev\Otp\Services\OtpDetails;
 use Abolaradev\Otp\Services\OtpStorage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;

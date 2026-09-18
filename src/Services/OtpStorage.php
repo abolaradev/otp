@@ -2,10 +2,9 @@
 
 namespace Abolaradev\Otp\Services;
 
+use Abolaradev\Otp\DTOs\OtpDetails;
 use Abolaradev\Otp\Traits\HasTokenCacher;
 use Abolaradev\Otp\Traits\HasTokenHasher;
-use Abolaradev\Otp\Services\OtpDetails;
-use Illuminate\Support\Facades\Cache;
 
 class OtpStorage
 {

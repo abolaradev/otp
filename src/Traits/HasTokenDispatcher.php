@@ -2,8 +2,8 @@
 
 namespace Abolaradev\Otp\Traits;
 
+use Abolaradev\Otp\DTOs\OtpDetails;
 use Abolaradev\Otp\Events\TokenGenerated;
-use Abolaradev\Otp\Services\OtpDetails;
 
 trait HasTokenDispatcher
 {
@@ -59,14 +59,14 @@ trait HasTokenDispatcher
     {
         $this->rateLimit('issuance', function(){
             $this->ensureNoActiveToken(function(){
-                $otpDetails = new OtpDetails(
-                    token: $this->generateToken(),
-                    expiration: $this->expiration,
-                    purpose: $this->purpose,
-                    channel: $this->channel,
-                    recipient: $this->recipient
-                );
-
+                $otpDetails = OtpDetails::fromArray([
+                    'token' => $this->generateToken(),
+                    'recipient' => $this->recipient,
+                    'purpose' => $this->purpose,
+                    'expiration' => $this->expiration,
+                    'channel'=> $this->channel
+                ]);
+            
                 event(new TokenGenerated($otpDetails));
             });
         });

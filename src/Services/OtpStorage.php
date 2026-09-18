@@ -21,25 +21,13 @@ class OtpStorage
     ){}
     
     /**
-     * Hash the OTP token.
-     *
-     * @return self
-     */
-    public function hash() :self
-    {
-        $this->hashToken();
-
-        return $this;
-    }
-    
-    /**
-     * Store the hashed OTP token in the cache.
+     * Hash the OTP token and store the hashed value in the cache
      *
      * @return void
      */
-    public function cache() :void
+    public function storeToken() :void
     {
+        $this->hashToken();
         $this->addTokenToCache();
     }
-
 } 

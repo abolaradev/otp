@@ -46,6 +46,6 @@ class OtpNotification extends Notification
      */
     public function afterSending(object $notifiable, string $channel, mixed $response): void
     {
-         (new OtpStorage($this->otpDetails))->hash()->cache();
+         (new OtpStorage($this->otpDetails))->storeToken();
     }
 }

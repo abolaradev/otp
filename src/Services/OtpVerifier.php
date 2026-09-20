@@ -3,6 +3,7 @@
 namespace Abolaradev\Otp\Services;
 
 use Abolaradev\Otp\DTOs\OtpDetails;
+use Abolaradev\Otp\Exceptions\OtpInvalidTokenException;
 use Abolaradev\Otp\Traits\HasTokenCacher;
 use Abolaradev\Otp\Traits\HasTokenHasher;
 use Illuminate\Support\Facades\Cache;
@@ -29,6 +30,8 @@ class OtpVerifier
      * the OTP from being reused.
      *
      * @return void
+     * 
+     * @throws OtpInvalidTokenException If the received token is invalid
      */
     public function verifyToken(): void
     {
@@ -38,8 +41,10 @@ class OtpVerifier
             $cachedToken
         );
 
-        if($verify){
-            Cache::forget($this->getCachedTokenKey());
+        if(!$verify){
+            throw new OtpInvalidTokenException;
         }
+
+        Cache::forget($this->getCachedTokenKey());
     }
 }

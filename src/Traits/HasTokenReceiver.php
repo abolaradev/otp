@@ -4,8 +4,6 @@ namespace Abolaradev\Otp\Traits;
 
 use Abolaradev\Otp\DTOs\OtpDetails;
 use Abolaradev\Otp\Events\TokenReceived;
-use Abolaradev\Otp\Exceptions\OtpInvalidTokenException;
-use Illuminate\Support\Str;
 
 trait HasTokenReceiver
 {
@@ -58,16 +56,10 @@ trait HasTokenReceiver
      * @param string $token The OTP token provided for verification.
      *
      * @return $this
-     *
-     * @throws OtpInvalidTokenException If the OTP token contains invalid characters.
      */
     public function token(string $token): self
     {
         $this->token = $token;
-
-        if (! Str::isMatch('/^\d*$/', $this->token)) {
-            throw new OtpInvalidTokenException;
-        }
 
         return $this;
     }

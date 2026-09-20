@@ -2,12 +2,11 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
 
-class OtpRateLimitExceededException extends Exception
+class OtpRateLimitExceededException extends OtpException
 {
-    public function __construct()
+    protected function getMessageKey(): string
     {
-        parent::__construct('Too many OTP requests. Please try again later.');
+        return "otp::exceptions.token_rate_limit";
     }
 }

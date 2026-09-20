@@ -2,12 +2,11 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
 
-class OtpActiveTokenExistsException extends Exception
+class OtpActiveTokenExistsException extends OtpException
 {
-    public function __construct()
+    protected function getMessageKey(): string
     {
-        parent::__construct('An active OTP token already exists for this recipient. ');
+        return 'otp::exceptions.active_token';
     }
 }

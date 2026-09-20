@@ -2,12 +2,11 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
 
-class OtpTokenExpiredException extends Exception
+class OtpTokenExpiredException extends OtpException
 {
-    public function __construct()
+    protected function getMessageKey(): string
     {
-        parent::__construct('The OTP token has expired.');
+        return 'otp::exceptions.token_expired';
     }
 }

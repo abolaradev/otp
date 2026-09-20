@@ -2,12 +2,11 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
 
-class OtpInvalidTokenException extends Exception
+class OtpInvalidTokenException extends OtpException
 {
-    public function __construct()
+    protected function getMessageKey(): string
     {
-        parent::__construct('The given token is invalid.');
+        return 'otp::exceptions.invalid_token';
     }
 }

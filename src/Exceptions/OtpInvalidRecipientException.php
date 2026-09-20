@@ -2,12 +2,10 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
-
-class OtpInvalidRecipientException extends Exception
+class OtpInvalidRecipientException extends OtpException
 {
-    public function __construct()
+    protected function getMessageKey(): string
     {
-        parent::__construct('The given recipient is invalid.');
+        return 'otp::exceptions.invalid_recipient';
     }
 } 

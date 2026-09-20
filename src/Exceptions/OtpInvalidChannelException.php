@@ -2,12 +2,19 @@
 
 namespace Abolaradev\Otp\Exceptions;
 
-use Exception;
 
-class OtpInvalidChannelException extends Exception
+class OtpInvalidChannelException extends OtpException
 {
     public function __construct(string $channel)
     {
-        parent::__construct("The given channel $channel is not a valid OTP channel.");
+        $this->replace['channel'] = $channel;
+        parent::__construct(__(
+            $this->getMessageKey() , $this->replace
+        ));
+    }
+
+    protected function getMessageKey(): string
+    {
+        return 'otp::exceptions.invalid_channel';
     }
 }

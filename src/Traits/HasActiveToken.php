@@ -4,6 +4,7 @@ namespace Abolaradev\Otp\Traits;
 
 use Abolaradev\Otp\Exceptions\OtpActiveTokenExistsException;
 use Abolaradev\Otp\Exceptions\OtpTokenExpiredException;
+use Abolaradev\Otp\Facades\Otp;
 use Closure;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,10 +17,9 @@ trait HasActiveToken
      */
     private function hasActiveToken(): bool
     {
-        $key = sprintf(
-            'otp:%s:%s',
-            $this->purpose,
-            $this->recipient
+        $key = Otp::generateTokenKey(
+            recipient:  $this->recipient,
+            purpose: $this->purpose
         );
 
         return Cache::has($key);

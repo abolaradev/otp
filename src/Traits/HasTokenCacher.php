@@ -2,6 +2,7 @@
 
 namespace Abolaradev\Otp\Traits;
 
+use Abolaradev\Otp\Facades\Otp;
 use Illuminate\Support\Facades\Cache;
 
 trait HasTokenCacher 
@@ -13,7 +14,10 @@ trait HasTokenCacher
     {
         Cache::add(
             key: $this->getCachedTokenKey(),
-            value: $this->getHashedToken(),
+            value: [
+                'expire_at' => $this->otpDetails->getExpiration() + time(),
+                'token' => $this->getHashedToken()
+            ],
             ttl: $this->otpDetails->getExpiration()
         );
     }
@@ -24,7 +28,9 @@ trait HasTokenCacher
      */
     protected function getCachedToken(): string
     {
-        return Cache::get($this->getCachedTokenKey());
+        $cache = Cache::get($this->getCachedTokenKey());
+
+        return $cache['token'];
     }
 
     /**
@@ -32,10 +38,9 @@ trait HasTokenCacher
      */
     private function getCachedTokenKey(): string
     {
-        return sprintf(
-            'otp:%s:%s',
-            $this->otpDetails->getPurpose(),
-            $this->otpDetails->getRecipient()
+        return Otp::generateTokenKey(
+            recipient:  $this->otpDetails->getRecipient(),
+            purpose: $this->otpDetails->getPurpose()
         );
     }
 }

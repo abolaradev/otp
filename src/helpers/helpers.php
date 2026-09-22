@@ -1,6 +1,6 @@
 <?php 
 
-function package_asset(string $path)
+function otp_asset(string $path)
 {
     $filePath = public_path("vendor/otp/$path");
 

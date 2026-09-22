@@ -7,5 +7,5 @@
 ]) }}  x-data='timer' x-cloak wire:ignore></span>
 
 @assets
-    <script src="{{ package_asset('js/otp-timer.js') }}"></script>
+    <script src="{{ otp_asset('js/otp-timer.js') }}"></script>
 @endassets

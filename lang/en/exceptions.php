@@ -2,8 +2,6 @@
 
 return [
 
-     'invalid_recipient' => 'The given recipient is invalid.',
-
      'active_token' => 'An active OTP token already exists for this recipient.',
 
      'invalid_token' => 'The given token is invalid.',

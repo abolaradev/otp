@@ -261,7 +261,7 @@ app/channels
 The generated class has the following structure:
 
 ```php
-use Abolaradev\Otp\Contracts\ShouldSmsChannel;
+use Abolaradev\Otp\Interfaces\ShouldSmsChannel;
 use Abolaradev\Otp\Notifications\OtpNotification;
 
 class MySmsChannel implements ShouldSmsChannel

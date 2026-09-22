@@ -3,13 +3,11 @@
 namespace Abolaradev\Otp;
 
 use Abolaradev\Otp\Exceptions\OtpBadMethodCallException;
-use Abolaradev\Otp\Exceptions\OtpInvalidRecipientException;
 use Abolaradev\Otp\Services\OtpIssuance;
 use Abolaradev\Otp\Services\OtpManager;
 use Abolaradev\Otp\Services\OtpVerfication;
 use Abolaradev\Otp\Services\OtpVerification;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 /**
  * Provides the main entry point for interacting with the OTP system.
@@ -105,16 +103,11 @@ class Otp extends OtpManager
     * @return OtpIssuance|OtpVerfication
     *
     * @throws OtpBadMethodCallException If the called method is not supported.
-    * @throws OtpInvalidRecipientException If the recipient is invalid.
     */
     public function __call($name, $arguments)
     {
         if (!in_array($name, ['to', 'from'])) {
             throw new OtpBadMethodCallException(method: $name);
-        }
-
-        if (!Str::isMatch('/^09[0-9]{9}$/', $arguments[0])) {
-            throw new OtpInvalidRecipientException;
         }
 
         $this->recipient = $arguments[0];

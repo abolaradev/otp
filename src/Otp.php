@@ -2,9 +2,7 @@
 
 namespace Abolaradev\Otp;
 
-use Abolaradev\Otp\Exceptions\OtpBadMethodCallException;
 use Abolaradev\Otp\Services\OtpIssuance;
-use Abolaradev\Otp\Services\OtpManager;
 use Abolaradev\Otp\Services\OtpVerfication;
 use Abolaradev\Otp\Services\OtpVerification;
 use Illuminate\Support\Facades\Cache;
@@ -15,24 +13,16 @@ use Illuminate\Support\Facades\Cache;
  * The class routes fluent method calls to the appropriate OTP context:
  * token issuance or token verification.
  */
-class Otp extends OtpManager
+class Otp
 {
-    /**
-     * Create a new instance with the given recipient.
-     *
-     * @param string $recipient The recipient associated with the OTP.
-     */
-    public function __construct(private string $recipient = '')
-    {}
-
     /**
      * Create a new OTP issuance context.
      *
      * @return OtpIssuance
      */
-    protected function issuance(): OtpIssuance
+    public function to(string $recipient): OtpIssuance
     {
-        return (new OtpIssuance)->to($this->recipient);
+        return (new OtpIssuance)->to($recipient);
     }
 
     /**
@@ -40,9 +30,9 @@ class Otp extends OtpManager
      *
      * @return OtpVerfication
      */
-    protected function verification(): OtpVerification
+    public function from(string $recipient): OtpVerification
     {
-        return (new OtpVerification)->from($this->recipient);
+        return (new OtpVerification)->from($recipient);
     }
 
     /**
@@ -90,31 +80,5 @@ class Otp extends OtpManager
         $remaining = $expireAt - time();
 
         return $remaining;
-    }
-
-   /**
-    * Handle dynamic calls to the OTP issuance and verification methods.
-    *
-    * Validates the recipient and routes the call to the appropriate OTP context.
-    *
-    * @param string $name The called method name.
-    * @param array $arguments The arguments passed to the method.
-    *
-    * @return OtpIssuance|OtpVerfication
-    *
-    * @throws OtpBadMethodCallException If the called method is not supported.
-    */
-    public function __call($name, $arguments)
-    {
-        if (!in_array($name, ['to', 'from'])) {
-            throw new OtpBadMethodCallException(method: $name);
-        }
-
-        $this->recipient = $arguments[0];
-
-        return match ($name) {
-            'to' => $this->issuance(),
-            'from' => $this->verification(),
-        };
     }
 }

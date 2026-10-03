@@ -2,11 +2,11 @@
 
 namespace App\Channels;
 
-use Abolaradev\Otp\Interfaces\ShouldSmsChannel;
+use Abolaradev\Otp\Contracts\ShouldOtpChannel;
 use Abolaradev\Otp\Notifications\OtpNotification;
 use Ipe\Sdk\Facades\SmsIr;
 
-class SmsIrChannel implements ShouldSmsChannel
+class SmsIrChannel implements ShouldOtpChannel
 {
     /**
      * Send the OTP notification through the custom SMS channel.
@@ -21,9 +21,9 @@ class SmsIrChannel implements ShouldSmsChannel
      */
     public function send(object $notifiable, OtpNotification $notification): void
     {
-       $sms = $notification->toSMS($notifiable);
-       $recipient = $sms->getRecipient();
-       $token = $sms->getToken();
+       $otp = $notification->toOtpPayload($notifiable);
+       $recipient = $otp->getRecipient();
+       $token = $otp->getToken();
 
        $templateId = config('otp.channels.smsir.template_id');
        $parameters = [

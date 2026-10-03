@@ -2,8 +2,8 @@
 
 namespace Abolaradev\Otp\Notifications;
 
+use Abolaradev\Otp\Channels\OtpChannel;
 use Abolaradev\Otp\DTOs\OtpDetails;
-use Abolaradev\Otp\Channels\SmsChannel;
 use Abolaradev\Otp\Services\OtpStorage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -26,17 +26,18 @@ class OtpNotification extends Notification
     public function via(object $notifiable): array
     {
         return [
-            SmsChannel::class
+            OtpChannel::class
         ];
     }
 
     /**
-     * Provides the OTP details required by the SMS notification channel.
+     * Get the OTP details payload for the notification.
      *
-     * @param  mixed $notifiable
-     * @return OtpDetails
+     * @param object $notifiable The entity receiving the notification.
+     *
+     * @return OtpDetails The OTP details.
      */
-    public function toSMS(object $notifiable) :OtpDetails
+    public function toOtpPayload(object $notifiable) :OtpDetails
     {
         return $this->otpDetails;
     }

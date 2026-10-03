@@ -1,6 +1,7 @@
 <?php
 
 use App\Channels\LogChannel;
+use App\Channels\MailChannel;
 use App\Channels\SmsIrChannel;
 
 return [
@@ -61,7 +62,7 @@ return [
     */
 
     'rate_limiter' => [
-        'max_attempts' => env('OTP_RATE_LIMIT_MAX_ATTEMPTS', 5),
+        'max_attempts' => env('OTP_RATE_LIMIT_MAX_ATTEMPTS', 500),
         'decay_seconds' => env('OTP_RATE_LIMIT_DECAY_SECONDS', 3600),
     ],
 
@@ -80,12 +81,20 @@ return [
             'driver' => LogChannel::class,
         ],
 
-        'smsir' => [
-            'driver' => SmsIrChannel::class,
-            'api_key' => env('SMSIR_API_KEY'),
-            'template_id' => env('SMSIR_TEMPLATE_ID'),
+        'sms'=> [
+
+            'smsir' => [
+                'driver' => SmsIrChannel::class,
+                'api_key' => env('SMSIR_API_KEY'),
+                'template_id' => env('SMSIR_TEMPLATE_ID'),
+            ],
+
         ],
 
+        'mail' => [
+            'driver' => MailChannel::class
+        ],
+        
     ],
 
 ];

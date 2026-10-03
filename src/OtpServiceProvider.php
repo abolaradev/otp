@@ -3,6 +3,7 @@
 namespace Abolaradev\Otp;
 
 use Abolaradev\Otp\Commands\MakeOtpChannelCommand;
+use Abolaradev\Otp\Commands\OtpInstallCommand;
 use Abolaradev\Otp\Events\TokenGenerated;
 use Abolaradev\Otp\Events\TokenReceived;
 use Abolaradev\Otp\Listeners\SendTokenToRecipient;
@@ -72,15 +73,10 @@ class OtpServiceProvider extends ServiceProvider
             __DIR__.'/../lang' => lang_path('vendor/otp'),
         ], ['otp', 'otp-lang']);
 
-        // Publish the OTP channels
-        $this->publishes([
-            __DIR__.'/../channels' => app_path('Channels'),
-            ['otp' , 'otp-channels']
-        ]);
-
         // Publish the package commands
         $this->commands([
-            MakeOtpChannelCommand::class,
+            OtpInstallCommand::class,
+            MakeOtpChannelCommand::class
         ]);
     }
 }

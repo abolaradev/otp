@@ -2,19 +2,20 @@
 
 namespace Abolaradev\Otp\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 use function Laravel\Prompts\alert;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 
-#[Signature('make:otp-channel {channel}')]
-#[Description('Create a new OTP notification channel.')]
 class MakeOtpChannelCommand extends Command
 {
+    protected $signature = "otp:channel {channel}";
+
+    protected $description = "Create a new OTP notification channel.";
+
     /**
      * Generate the template for the OTP notification channel class.
      *
@@ -29,16 +30,16 @@ class MakeOtpChannelCommand extends Command
 
         namespace App\Channels;
 
-        use Abolaradev\Otp\Interfaces\ShouldSmsChannel;
+        use Abolaradev\Otp\Contracts\ShouldOtpChannel;
         use Abolaradev\Otp\Notifications\OtpNotification;
 
-        class {$channelClassName} implements ShouldSmsChannel
+        class {$channelClassName} implements ShouldOtpChannel
         {
             /**
-             * Send the OTP notification through the custom SMS channel.
+             * Send the OTP notification through the custom OTP channel.
              *
-             * Resolves the SMS payload from the notification and provides access
-             * to the recipient and OTP token for custom message delivery.
+             * Resolves the OTP payload from the notification and provides access
+             * to the recipient and OTP token for custom delivery implementation.
              *
              * @param object \$notifiable The entity receiving the notification.
              * @param OtpNotification \$notification The OTP notification instance.
@@ -47,9 +48,9 @@ class MakeOtpChannelCommand extends Command
              */
             public function send(object \$notifiable, OtpNotification \$notification): void
             {
-               \$sms = \$notification->toSMS(\$notifiable);
-               \$recipient = \$sms->getRecipient();
-               \$token = \$sms->getToken();
+               \$otp = \$notification->toOtpPayload(\$notifiable);
+               \$recipient = \$otp->getRecipient();
+               \$token = \$otp->getToken();
 
                // Implement the SMS delivery logic for this channel ...
             }
@@ -69,10 +70,9 @@ class MakeOtpChannelCommand extends Command
     {
         $channelDirectory = app_path('Channels');
 
-        if (!is_dir($channelDirectory)) {
-            mkdir(
-                directory: $channelDirectory,
-                permissions: 0775,
+        if (!File::isDirectory($channelDirectory)) {
+            File::makeDirectory(
+                path: $channelDirectory,
                 recursive: true
             );
         }
@@ -82,10 +82,10 @@ class MakeOtpChannelCommand extends Command
                           ->start($channelDirectory . DIRECTORY_SEPARATOR)
                           ->finish('.php');
 
-        if(is_file($channelPath)) {
+        if(File::isFile($channelPath)) {
             alert('OTP Notification Channel already exists!');
         }else{
-            file_put_contents($channelPath, $this->template());
+            File::put($channelPath,$this->template());
             info('OTP Notification Channel created successfully!');
         }
 

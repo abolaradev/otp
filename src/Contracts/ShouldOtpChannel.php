@@ -1,16 +1,10 @@
 <?php
 
-namespace Abolaradev\Otp\Interfaces;
+namespace Abolaradev\Otp\Contracts;
 
 use Abolaradev\Otp\Notifications\OtpNotification;
 
-/**
- * Defines the contract for OTP SMS notification channels.
- *
- * Implementations are responsible for sending an OTP notification
- * through a specific SMS provider or delivery mechanism.
- */
-interface ShouldSmsChannel
+interface ShouldOtpChannel
 {
     /**
      * Send the OTP notification.

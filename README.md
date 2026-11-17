@@ -80,6 +80,8 @@ return [
         'decay_seconds' => env('OTP_RATE_LIMIT_DECAY_SECONDS', 3600),
     ],
 
+    'queue' => true,
+
     'channels' => [
 
         'log' => [
@@ -317,6 +319,23 @@ The limit is checked independently for:
 
 * OTP issuance
 * OTP verification
+
+
+# Queue Notifications
+
+The package supports asynchronous OTP notification delivery through Laravel's Queue system.
+
+To enable or disable this feature, configure the `queue` option in `config/otp.php`:
+
+```php
+'queue' => true,
+```
+
+When enabled, OTP notifications are dispatched to the queue and processed asynchronously by a Laravel Queue Worker.
+
+When disabled, OTP notifications are sent synchronously during the request.
+
+Make sure your Laravel Queue connection is properly configured and a Queue Worker is running when this feature is enabled.
 
 # Exceptions
 

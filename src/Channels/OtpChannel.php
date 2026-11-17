@@ -4,6 +4,7 @@ namespace Abolaradev\Otp\Channels;
 
 use Abolaradev\Otp\Contracts\ShouldOtpChannel;
 use Abolaradev\Otp\Exceptions\OtpInvalidChannelException;
+use Abolaradev\Otp\Jobs\SendOtpNotification;
 use Abolaradev\Otp\Notifications\OtpNotification;
 use Illuminate\Support\Arr;
 
@@ -15,6 +16,9 @@ class OtpChannel implements ShouldOtpChannel
      * Resolves the requested OTP channel from the package configuration,
      * validates the channel driver class, and delegates the notification
      * sending to the resolved channel implementation.
+     *
+     * If queue processing is enabled in the package configuration,
+     * the notification will be dispatched to the queue for asynchronous processing.
      *
      * @param object $notifiable The entity receiving the notification.
      * @param OtpNotification $notification The OTP notification instance.
@@ -42,6 +46,11 @@ class OtpChannel implements ShouldOtpChannel
             ! is_subclass_of($driver, ShouldOtpChannel::class)
         ) {
             throw new OtpInvalidChannelException($channel);
+        }
+
+        if (config('otp.queue')) {
+            SendOtpNotification::dispatch($driver, $notifiable, $notification);
+            return;
         }
 
         (new $driver)->send($notifiable, $notification);

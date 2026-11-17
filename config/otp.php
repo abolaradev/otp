@@ -66,6 +66,18 @@ return [
         'decay_seconds' => env('OTP_RATE_LIMIT_DECAY_SECONDS', 3600),
     ],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Queue Notifications
+    |--------------------------------------------------------------------------
+    |
+    | Determines whether OTP notifications should be dispatched to the queue
+    | for asynchronous processing.
+    |
+    */
+    'queue' => true,
+
     /*
     |--------------------------------------------------------------------------
     | OTP Channels
